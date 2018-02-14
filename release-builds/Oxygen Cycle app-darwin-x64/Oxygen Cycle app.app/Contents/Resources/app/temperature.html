@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Temperature</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap.css">
+    <link rel="stylesheet" href="node_modules/vis/dist/vis.css">
+</head>
+
+<body>
+    <script>
+        require('./node_modules/vis/dist/vis.js');
+    </script>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="index.html" class="navbar-brand">Home</a>
+            </div>
+            <div class="navbar-header active">
+                <a href="" class="navbar-brand">Temperature</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="page-header">
+            <h1>Dissolved Oxygen</h1>
+        </div>
+        <form>
+            <div class="form-group col-md-7">
+                <input type="radio" name="range-check" id="r1" value="temperature">
+                <label for="temp">Temperature :</label>
+                <input class="form-control" id="temp" placeholder="In Celsius" required="true">
+            </div>
+            <div class="form-group col-md-7">
+                <input type="radio" name="range-check" id="r2" value="temperature">
+                <label for="temp">Salinity :</label>
+                <input class="form-control" id="sal" placeholder="In ppt" required="true">
+            </div>
+            <div class="form-group col-md-7">
+                <input type="radio" name="range-check" id="r3" value="oxygen">
+                <label for="oxy">Partial pressure of Oxygen in the atmosphere :</label>
+                <input class="form-control" id="oxy" placeholder="In ATM" required="true">
+            </div>
+            <div style="padding-left: 15px;">
+                <button type="button" onclick="mainCalc()" class="btn btn-danger">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="graph_display" style="padding-top: 20px;"></div>
+    <div>
+        <h3 class="text-center" id="y_text" style="padding-bottom: 20px;"></h3>
+    </div>
+
+    <script>
+        var vis = require('vis');
+
+        function mainCalc() {
+
+            if (document.getElementById('r1').checked) {
+                var run = document.getElementById('temp').value;
+                console.log(run);
+                var runarr = run.split("-");
+                var range_lower = Number(runarr[0]);
+                var range_upper = Number(runarr[1]);
+                console.log(range_lower);
+                console.log(range_upper);
+                createData();
+            }
+
+            function createData() {
+                console.log('i have reached here');
+                //Getting the value of the inputs
+                var oxy = Number(document.getElementById('oxy').value);
+                var sal = Number(document.getElementById('sal').value);
+                var fin = 0;
+                var i = 0;
+                var items = [];
+
+                var groups = new vis.DataSet();
+                groups.add({
+                    id: 0,
+                    content: 'Dissolved Oxygen'
+                });
+
+                for (i = range_lower; i < range_upper; i++) {
+                    if (sal > 0 && sal < 15) {
+                        var l = 13.5;
+                    }
+                    if (sal >= 15 && sal < 30) {
+                        var l = 12.5;
+                    }
+                    if (sal >= 30) {
+                        var l = 11.5;
+                    }
+                    fin = Number((oxy / 100) * (l - (0.3 * i)));
+                    items.push({
+                        y: fin,
+                        x: i,
+                        group: 0
+                    })
+                }
+                console.log(items);
+                var options = {
+                    legend: true,
+                    shaded: true,
+                }
+                document.getElementById('y_text').innerHTML = "Temperature";
+                var container = document.getElementById('graph_display');
+                var dataset = new vis.DataSet(items);
+                var Graph2d = new vis.Graph2d(container, dataset, options, groups);
+            }
+
+            if (document.getElementById('r2').checked) {
+                var run = document.getElementById('sal').value;
+                console.log(run);
+                var runarr = run.split("-");
+                var range_lower = Number(runarr[0]);
+                var range_upper = Number(runarr[1]);
+                console.log(range_lower);
+                console.log(range_upper);
+                createData2();
+            }
+
+            function createData2() {
+                console.log('i have reached here');
+                //Getting the value of the inputs
+                var oxy = Number(document.getElementById('oxy').value);
+                var temp = Number(document.getElementById('temp').value);
+                var fin = 0;
+                var i = 0;
+                var items = [];
+
+                var groups = new vis.DataSet();
+                groups.add({
+                    id: 0,
+                    content: 'Dissolved Oxygen'
+                });
+
+                for (i = range_lower; i < range_upper; i++) {
+                    if (i > 0 && i < 15) {
+                        var l = 13.5;
+                    }
+                    if (i >= 15 && i < 30) {
+                        var l = 12.5;
+                    }
+                    if (i >= 30) {
+                        var l = 11.5;
+                    }
+                    fin = Number((oxy / 100) * (l - (0.3 * temp)));
+                    items.push({
+                        y: fin,
+                        x: i,
+                        group: 0
+                    })
+                }
+                console.log(items);
+                var options = {
+                    legend: true,
+                    shaded: true,
+                }
+                document.getElementById('y_text').innerHTML = "Salinity";
+                var container = document.getElementById('graph_display');
+                var dataset = new vis.DataSet(items);
+                var Graph2d = new vis.Graph2d(container, dataset, options, groups);
+            }
+
+            if (document.getElementById('r3').checked) {
+                var run = document.getElementById('oxy').value;
+                console.log(run);
+                var runarr = run.split("-");
+                var range_lower = Number(runarr[0]);
+                var range_upper = Number(runarr[1]);
+                console.log(range_lower);
+                console.log(range_upper);
+                createData3();
+            }
+
+            function createData3() {
+                console.log('i have reached here');
+                //Getting the value of the inputs
+                var temp = Number(document.getElementById('temp').value);
+                var sal = Number(document.getElementById('sal').value);
+                var fin = 0;
+                var i = 0;
+                var items = [];
+
+                var groups = new vis.DataSet();
+                groups.add({
+                    id: 0,
+                    content: 'Dissolved Oxygen'
+                });
+
+                for (i = range_lower; i < range_upper; i++) {
+                    if (sal > 0 && sal < 15) {
+                        var l = 13.5;
+                    }
+                    if (sal >= 15 && sal < 30) {
+                        var l = 12.5;
+                    }
+                    if (sal >= 30) {
+                        var l = 11.5;
+                    }
+                    fin = Number((i / 100) * (l - (0.3 * temp)));
+                    items.push({
+                        y: fin,
+                        x: i,
+                        group: 0
+                    })
+                }
+                console.log(items);
+                var options = {
+                    legend: true,
+                    shaded: true,
+                }
+                document.getElementById('y_text').innerHTML = "Temperature";
+                var container = document.getElementById('graph_display');
+                var dataset = new vis.DataSet(items);
+                var Graph2d = new vis.Graph2d(container, dataset, options, groups);
+            }
+        };
+    </script>
+    <script>
+        require('./renderer.js');
+    </script>
+</body>
+
+</html>
