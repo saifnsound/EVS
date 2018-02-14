@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>pH</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap.css">
+    <link rel="stylesheet" href="node_modules/vis/dist/vis.css">
+</head>
+
+<body>
+    <script>
+        require('./node_modules/vis/dist/vis.js');
+    </script>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="index.html" class="navbar-brand">Home</a>
+            </div>
+            <div class="navbar-header active">
+                <a href="ph.html" class="navbar-brand">pH</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="page-header">
+            <h1>pH</h1>
+            <p></p>
+        </div>
+        <div>
+            <p>With change in pH of water, the capacity of the water body to dissolve oxygen changes.
+                </p><p>2H<sup>+</sup> + 2e<sup>-</sup>(INSERT GLYPH->) H<sub>2(g)</sub><br>
+                O<sub>2(g)</sub> + 4H<sup>+</sup> + 4e<sup>-</sup>(INSERT GLYPH->) 2H<sub>2</sub>O E<sub>0</sub> = +1.23 V</p>
+                <br>Taking into account:<br> 
+                <ul>
+                    <li>Absence of sewage</li>
+                    <li>Presence of 4 big headed carps in aquaculture water</li>
+                    <li>Absence of aquatic life in non aquaculture water</li> 
+                </ul>
+                <br>
+                The dissolved oxygen content in the water varies with pH of water by the following formula:<br>
+                C<sub>DO</sub> = 68.55 + 9.11pH
+            <br>
+            </p>
+            <br>
+            <form>
+                <label for="water">Water type: </label>
+                <select id="wtype">
+                    <option value="non">Non-Aquaculture</option>
+                    <option value="a">Aquaculture</option>
+                </select>
+                <div class="form-group">
+                    <label for="ph">pH value:</label>
+                    <input class="form-control" id="ph" placeholder="Enter Range" required="true">
+                </div>
+                <button type="button" onclick="mainCalc()" class="btn btn-danger">Submit</button>
+            </form>
+        </div>
+        <div id="graph_display" style="padding-top: 20px;"></div>
+        <div>
+            <h3 class="text-center" id="y_text" style="padding-bottom: 20px;"></h3>
+        </div>
+        <div>
+
+        </div>
+
+        <script>
+            var vis = require('vis');
+
+            function mainCalc() {
+                var run = document.getElementById('ph').value;
+                console.log(run);
+                var runarr = run.split("-");
+                var range_lower = Number(runarr[0]);
+                var range_upper = Number(runarr[1]);
+                console.log(range_lower);
+                console.log(range_upper);
+                createData();
+
+                function createData() {
+                    console.log('i have reached here');
+                    //Getting the value of the inputs
+                    var fin = 0;
+                    var i = 0;
+                    var items = [];
+
+                    var groups = new vis.DataSet();
+                    groups.add({
+                        id: 0,
+                        content: 'Dissolved Oxygen'
+                    });
+
+                    for (i = range_lower; i < range_upper; i++) {
+                        if (document.getElementById(wtype) == 'a') {
+                            fin = 60.77 + 8.19 * i;
+                        } else {
+                            fin = 68.55 + 9.11 * i;
+                        }
+                        items.push({
+                            y: fin,
+                            x: i,
+                            group: 0
+                        })
+                    }
+                    console.log(items);
+                    var options = {
+                        legend: true,
+                        shaded: true,
+                    }
+                    document.getElementById('y_text').innerHTML = "pH";
+                    var container = document.getElementById('graph_display');
+                    var dataset = new vis.DataSet(items);
+                    var Graph2d = new vis.Graph2d(container, dataset, options, groups);
+                }
+
+
+
+            };
+        </script>
+        <script>
+            require('./renderer.js');
+        </script>
+
+</body>
+
+</html>

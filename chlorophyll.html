@@ -10,6 +10,7 @@
 <body>
 	<script>
 		require('./node_modules/vis/dist/vis.js');
+		require('./node_modules/mathjs/dist/math.js');
 	</script>
 	<nav class="navbar navbar-default">
 		<div class="container">
@@ -17,31 +18,31 @@
 				<a href="index.html" class="navbar-brand">Home</a>
 			</div>
 			<div class="navbar-header active">
-				<a href="" class="navbar-brand">Chlorophyll</a>
+				<a href="chlorophyll.html" class="navbar-brand">Chlorophyll</a>
 			</div>
 		</div>
 	</nav>
 	<div class="container">
 		<div class="page-header">
 			<h1>Chlorophyll</h1>
+			<p></p>
 		</div>
+		<div>
+			<p>Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize nutrients from CO<sub>2</sub> and water.It generates oxygen as a by-product.
+			</p><p>Most photosynthesis takes place at the surface (by shallow water plants and algae), a large portion of the process takes place underwater (by seaweed, sub-surface algae and phytoplankton).
+			</p><p>With change in chlorophyll content in a water body, the amount of dissolved oxygen in the water varies</p><p>
+			</p><p>Taking into consideration exposure of the water body to:<br><ul> 
+				<li>Absence of sewage</li>
+				<li>Absence of aquatic animals (there is no intake of oxygen by animals) in non aquaculture water</li>
+				</ul>
+				The dissolved oxygen content in the water varies with chlorophyll concentration by the following formula:
+			<br>C<sub>DO</sub> = -31.0 + 10.96ln(Chl + 2.55)<br>where: Chl- Chlorophyll concentration in &mu;g/L
+		<br><br>
 		<form>
 			<div class="form-group">
-				<label> Water type : </label>
-				<select id="watertype" required="true">
-					<option>Aquaculture</option>
-					<option>Non-aquaculture</option>
-				</select>
-			</div>
-			<div class="form-group">
-				<input type="checkbox" name="range-check" id="r1" value="conc">
 				<label for="conc">Chlorophyll concentration :</label>
-				<input class="form-control" id="conc" placeholder="in &mu;/L" required="true">
+				<input class="form-control" id="conc" placeholder="Enter Range in &mu;g/L" required="true">
 			</div>
-			<!-- <div class="form-group">
-					<label> Chlorophyll concentration : </label>
-				   <input id="chlorophyll" type="number" required="true"> <b>&mu;/L</b>
-			</div> -->
 			<button type="button" onclick="mainCalc()" class="btn btn-danger">Submit</button>
 		</form>
 	</div>
@@ -55,10 +56,9 @@
 
 	<script>
 		var vis = require('vis');
+		var math = require('mathjs');
 
 		function mainCalc() {
-
-			if (document.getElementById('r1').checked) {
 				var run = document.getElementById('conc').value;
 				console.log(run);
 				var runarr = run.split("-");
@@ -67,14 +67,10 @@
 				console.log(range_lower);
 				console.log(range_upper);
 				createData();
-			} else {
-
-			}
 
 			function createData() {
 				console.log('i have reached here');
 				//Getting the value of the inputs
-				var water = document.getElementById('watertype').value;
 				var fin = 0;
 				var i = 0;
 				var items = [];
@@ -86,11 +82,7 @@
 				});
 
 				for (i = range_lower; i < range_upper; i++) {
-					if (water == 'Non-aquaculture') {
-						fin = Number(7.16 + 0.44 * i);
-					} else {
-						fin = Number(1)
-					}
+						fin = Number(-31.0 + 10.96*2.3*math.log(i+2.55));
 					items.push({
 						y: fin,
 						x: i,

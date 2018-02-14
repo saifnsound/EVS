@@ -17,29 +17,42 @@
                 <a href="index.html" class="navbar-brand">Home</a>
             </div>
             <div class="navbar-header active">
-                <a href="" class="navbar-brand">Temperature</a>
+                <a href="temperature.html" class="navbar-brand">Temperature</a>
             </div>
         </div>
     </nav>
     <div class="container">
         <div class="page-header">
-            <h1>Dissolved Oxygen</h1>
+            <h1>Temperature</h1>
         </div>
+        <div>
+                To calculate dissolved oxygen concentrations from air saturation, it is necessary to know the temperature and salinity of the water body.
+                <br>Partial pressure of oxygen contributes to the percent air saturation. Salinity and temperature can then be used in Henry’s Law to calculate what the dissolved oxygen concentration would be at 100% air saturation.
+                Equation to find out 100% saturation content of dissolved oxygen in a water body using Henry's law:
+                <br>
+                <br>[O<sub>2aq</sub>] = P<sub>iO</sub>/[O<sub>2air</sub>]
+                <br>where:
+                <br>[O<sub>2air</sub>] - Concentration of oxygen in the air
+                <br>[O<sub>2aq</sub>] - Concentratio of dissolved oxygen in water
+                <br>P<sub>iO</sub> - Partial pressure of oxygen in the air
+                <br>
+        </div>
+        <br>
         <form>
             <div class="form-group col-md-7">
                 <input type="radio" name="range-check" id="r1" value="temperature">
-                <label for="temp">Temperature :</label>
+                <label for="temp">Temperature(Enter a range, eg:0-5): </label>
                 <input class="form-control" id="temp" placeholder="In Celsius" required="true">
             </div>
             <div class="form-group col-md-7">
                 <input type="radio" name="range-check" id="r2" value="temperature">
-                <label for="temp">Salinity :</label>
-                <input class="form-control" id="sal" placeholder="In ppt" required="true">
+                <label for="temp">Salinity(Enter a number, eg:5): </label>
+                <input class="form-control" id="sal" placeholder="g/kg" required="true">
             </div>
             <div class="form-group col-md-7">
                 <input type="radio" name="range-check" id="r3" value="oxygen">
-                <label for="oxy">Partial pressure of Oxygen in the atmosphere :</label>
-                <input class="form-control" id="oxy" placeholder="In ATM" required="true">
+                <label for="oxy">Partial pressure of Oxygen in the atmosphere(Enter a number, eg:0.7):</label>
+                <input class="form-control" id="oxy" placeholder="ATM" required="true">
             </div>
             <div style="padding-left: 15px;">
                 <button type="button" onclick="mainCalc()" class="btn btn-danger">Submit</button>
@@ -93,7 +106,7 @@
                     if (sal >= 30) {
                         var l = 11.5;
                     }
-                    fin = Number((oxy / 100) * (l - (0.3 * i)));
+                    fin = Number(oxy * (l - (0.3 * i)));
                     items.push({
                         y: fin,
                         x: i,
